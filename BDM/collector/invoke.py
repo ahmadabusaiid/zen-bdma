@@ -41,14 +41,18 @@ class OdooInvoker(Invoker):
         super().__init__(url, uid, password)
         self._db = db
 
-    def query(self, model, filter, projection):
+    def query(self, model, filter, features, limit):
 
-        models = xmlrpc.client.ServerProxy('{url}/xmlrpc/2/object'.format(url = self._uri))
-        result = models.execute_kw(self._db, self._username, self._password, model, 'search_read',[[filter]], projection )
+        models = xmlrpc.client.ServerProxy('{}/xmlrpc/2/object'.format(self._uri))
+        result = models.execute_kw(
+            self._db, 
+            self._username, 
+            self._password, 
+            model, # model
+            'search_read',
+            [filter], # filter
+            {'fields': features, 'limit': limit} # features, limit criterias etc.
+        )
 
-        with open('data.json', 'w') as f:
-            json.dump(result, f,indent=4)
-
-# mode = DolibarrInvoker()
-mode = OdooInvoker()
-mode.query('report.stock.quantity', ['state', '!=', 'forecast'],{'fields': ['id', 'company_id', 'date', 'display_name','product_id','product_qty','state'], 'limit': 5})
+        with open(f'{model}.json', 'w') as f:
+            json.dump(result, f, indent = 4)
