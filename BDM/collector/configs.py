@@ -1,7 +1,11 @@
 #!/usr/bin/env python
 
 dolibarr = {
+<<<<<<< Updated upstream
     "host_path" : 'localhost:8000',
+=======
+    "host_path" : '10.4.41.57:80',
+>>>>>>> Stashed changes
     "api_key" : "nd6hgbcr"
 }
 

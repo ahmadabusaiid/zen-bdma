@@ -5,6 +5,10 @@ import json
 from abc import abstractmethod
 from dolibarr import Dolibarr
 import configs
+<<<<<<< Updated upstream
+=======
+#import request
+>>>>>>> Stashed changes
 import requests
 
 class Invoker:
@@ -21,7 +25,10 @@ class Invoker:
 class DolibarrInvoker(Invoker):
 
     def __init__(self):
+        host_path = configs.dolibarr["host_path"]
+        self._dolibarr_inst = Dolibarr(f'http://{host_path}/api/index.php/'.format(server=configs.dolibarr["host_path"]), configs.dolibarr["api_key"])
 
+<<<<<<< Updated upstream
         dolibarr_inst = Dolibarr('http://{server}:{port}/api/index.php/'.format(server=configs.dolibarr["server"], port=configs.dolibarr["port"]), configs.dolibarr["api_key"])
         super().__init__(dolibarr_inst, None, None)
     
@@ -31,6 +38,13 @@ class DolibarrInvoker(Invoker):
         with open('data_dolibarr.json'.format(), 'w') as f:
             json.dump(product_dict, f,indent=4)
 
+=======
+        super(Invoker, self).__init__()
+    def query(self, model): 
+        result = self._dolibarr_inst.call_list_api(model)
+        with open(f'{model}.json', 'w') as f:
+            json.dump(result, f, indent = 4)
+>>>>>>> Stashed changes
 
 class OdooInvoker(Invoker):
 
@@ -76,7 +90,12 @@ class WeatherAPIInvoker(Invoker):
 
         result = requests.get('{host_url}/{path}'.format(host_url = self._uri, path = path), params = params)
 
+<<<<<<< Updated upstream
         file = path.split('.')
         with open(f'{file[0]}.json', 'w') as f:
             json.dump(result.json(), f, indent = 4)
+=======
+        
+#WeatherAPIInvoker().query()
+>>>>>>> Stashed changes
 
