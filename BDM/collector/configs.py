@@ -2,7 +2,7 @@
 
 dolibarr = {
     "host_path" : 'localhost:8000',
-    "api_key" : "9c85e991391b679d0ac67573cb5d6909f169f5dc"
+    "api_key" : "nd6hgbcr"
 }
 
 odoo = {
@@ -11,5 +11,14 @@ odoo = {
 
 weather_api = {
     "server_url" : 'http://api.weatherapi.com/v1',
-    "api_key" : "e3cf29be53a84b4d961224304231204"
+    "api_key" : "e3cf29be53a84b4d961224304231204",
+    "forecast":{
+        "city" : "Barcelona",
+        "days": 1
+    },
+    "history":{
+        "start_date": "2020-01-01",
+        "end_date" :"2020-01-02"
+    }
+
 }
