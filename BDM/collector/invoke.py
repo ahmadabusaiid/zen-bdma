@@ -5,6 +5,7 @@ import json
 from abc import abstractmethod
 from dolibarr import Dolibarr
 import configs
+import request
 
 class Invoker:
 
@@ -21,7 +22,7 @@ class DolibarrInvoker(Invoker):
 
     def __init__(self):
 
-        dolibarr_inst = Dolibarr('http://{server}:{port}/api/index.php/'.format(server=configs.dolibarr["server"], port=configs.dolibarr["port"]), configs.dolibarr["api_key"])
+        dolibarr_inst = Dolibarr('http://{host_path}/api/index.php/'.format(server=configs.dolibarr["host_path"]), configs.dolibarr["api_key"])
         product_dict = dolibarr_inst.call_list_api('products')
         print(product_dict)
         super(Invoker, self).__init__()
@@ -56,3 +57,21 @@ class OdooInvoker(Invoker):
 
         with open(f'{model}.json', 'w') as f:
             json.dump(result, f, indent = 4)
+
+class WeatherAPIInvoker(Invoker):
+    
+    def __init__(self):
+
+        super().__init__(configs.weather_api["server_url"], None, configs.weather_api["api_key"])
+
+    def query(self):
+
+        result = requests.get('{}/forecast'.format(self._uri), params={ key : self._password, q: "Barcelona", days : 1 })
+
+        with open('weather.json', 'w') as f:
+            json.dump(result, f, indent = 4)
+
+
+        
+WeatherAPIInvoker().query()
+
