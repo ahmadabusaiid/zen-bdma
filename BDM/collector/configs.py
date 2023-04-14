@@ -1,15 +1,18 @@
 #!/usr/bin/env python
 
 dolibarr = {
+    "datasource_name": "dolibarr",
     "host_path" : '10.4.41.57:80',
     "api_key" : "nd6hgbcr"
 }
 
 odoo = {
+    "datasource_name": "odoo",
     "server_url" : "https://demo.odoo.com/start"
 }
 
 weather_api = {
+    "datasource_name": "weatherapi",
     "server_url" : 'http://api.weatherapi.com/v1',
     "api_key" : "e3cf29be53a84b4d961224304231204",
     "forecast":{

@@ -1,6 +1,5 @@
 from invoke import WeatherAPIInvoker
 import configs
-from datetime import datetime
 
 wi = WeatherAPIInvoker()
 

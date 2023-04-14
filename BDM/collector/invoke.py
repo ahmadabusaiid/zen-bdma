@@ -6,13 +6,24 @@ from abc import abstractmethod
 from dolibarr import Dolibarr
 import configs
 import requests
+import datetime
+import os
+import errno
 
 class Invoker:
 
-    def __init__(self, uri, username, password):
+    def __init__(self, uri, username, password, datasource):
         self._uri = uri
         self._username = username
         self._password = password
+        self._datasource = f'data/{datasource}'
+
+        if not os.path.exists(self._datasource):
+            try:
+                os.makedirs(self._datasource)
+            except OSError as exc: # Guard against race condition
+                if exc.errno != errno.EEXIST:
+                    raise
 
     @abstractmethod
     def query(self):
@@ -24,10 +35,14 @@ class DolibarrInvoker(Invoker):
         host_path = configs.dolibarr["host_path"]
         self._dolibarr_inst = Dolibarr(f'http://{host_path}/api/index.php/'.format(server=configs.dolibarr["host_path"]), configs.dolibarr["api_key"])
 
-        super(Invoker, self).__init__()
+        super().__init__(None, None,None, None, configs.dolibarr['datasource_name'])
+
     def query(self, model): 
+
         result = self._dolibarr_inst.call_list_api(model)
-        with open(f'{model}.json', 'w') as f:
+        timestamp = datetime.datetime.now().strftime('%Y-%m-%d')
+
+        with open(f'{self._datasource}/{model}-{timestamp}.json', 'w') as f:
             json.dump(result, f, indent = 4)
 
 class OdooInvoker(Invoker):
@@ -41,7 +56,7 @@ class OdooInvoker(Invoker):
         common.version()
         uid = common.authenticate(db, username, password, {})
 
-        super().__init__(url, uid, password)
+        super().__init__(url, uid, password, configs.odoo['datasource_name'])
         self._db = db
 
     def query(self, model, filter, features, limit):
@@ -57,24 +72,27 @@ class OdooInvoker(Invoker):
             {'fields': features, 'limit': limit} # features, limit criterias etc.
         )
 
-        with open(f'{model}.json', 'w') as f:
+        timestamp = datetime.datetime.now().strftime('%Y-%m-%d')
+        
+        with open(f'{self._datasource}/{model}-{timestamp}.json', 'w') as f:
             json.dump(result, f, indent = 4)
 
 class WeatherAPIInvoker(Invoker):
     
     def __init__(self):
 
-        super().__init__(configs.weather_api["server_url"], None, configs.weather_api["api_key"])
+        super().__init__(configs.weather_api["server_url"], None, configs.weather_api["api_key"], configs.weather_api['datasource_name'])
 
 
     def query(self, path, ext_params):
 
         int_params = { "key" : self._password }
         params = {key: value for (key, value) in (int_params.items() | ext_params.items())}
-
         result = requests.get('{host_url}/{path}'.format(host_url = self._uri, path = path), params = params)
 
+        timestamp = datetime.datetime.now().strftime('%Y-%m-%d')
+        
         file = path.split('.')
-        with open(f'{file[0]}.json', 'w') as f:
+        with open(f'{self._datasource}/{file[0]}-{timestamp}.json', 'w') as f:
             json.dump(result.json(), f, indent = 4)
 
