@@ -9,6 +9,7 @@ import requests
 import datetime
 import os
 import errno
+from pathlib import Path
 
 class Invoker:
 
@@ -16,7 +17,7 @@ class Invoker:
         self._uri = uri
         self._username = username
         self._password = password
-        self._datasource = f'data/{datasource}'
+        self._datasource = f'{Path.home()}/data/{datasource}'
 
         if not os.path.exists(self._datasource):
             try:
