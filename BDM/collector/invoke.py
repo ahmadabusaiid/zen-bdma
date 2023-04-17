@@ -14,20 +14,24 @@ import sys
 sys.path.insert(0, os.path.dirname(Path(__file__).parent.absolute()))
 import configs as configs
 
+
+def mkdirs (path):
+    if not os.path.exists(path):
+        try:
+            os.makedirs(path)
+        except OSError as exc: # Guard against race condition
+            if exc.errno != errno.EEXIST:
+                raise
+
 class Invoker:
 
     def __init__(self, uri, username, password, datasource):
         self._uri = uri
         self._username = username
         self._password = password
-        self._datasource = f'{Path.home()}/data/{datasource}'
-
-        if not os.path.exists(self._datasource):
-            try:
-                os.makedirs(self._datasource)
-            except OSError as exc: # Guard against race condition
-                if exc.errno != errno.EEXIST:
-                    raise
+        output_dir = configs.global_params['temp_dir']
+        self._datasource = f'{Path.home()}/{output_dir}/{datasource}'
+        mkdirs(self._datasource)
 
     @abstractmethod
     def query(self):
@@ -46,7 +50,9 @@ class DolibarrInvoker(Invoker):
         result = self._dolibarr_inst.call_list_api(model)
         timestamp = datetime.datetime.now().strftime('%Y-%m-%d')
 
-        with open(f'{self._datasource}/{model}-{timestamp}.json', 'w') as f:
+        odir_path = f'{self._datasource}/{model}/{timestamp}'
+        mkdirs(self._datasource)
+        with open(f'{odir_path}/1.json', 'w') as f:
             json.dump(result, f, indent = 4)
 
 class OdooInvoker(Invoker):
@@ -77,8 +83,9 @@ class OdooInvoker(Invoker):
         )
 
         timestamp = datetime.datetime.now().strftime('%Y-%m-%d')
-        
-        with open(f'{self._datasource}/{model}-{timestamp}.json', 'w') as f:
+        odir_path = f'{self._datasource}/{model}/{timestamp}'
+        mkdirs(odir_path)
+        with open(f'{odir_path}/1.json', 'w') as f:
             json.dump(result, f, indent = 4)
 
 class WeatherAPIInvoker(Invoker):
@@ -97,6 +104,8 @@ class WeatherAPIInvoker(Invoker):
         timestamp = datetime.datetime.now().strftime('%Y-%m-%d')
         
         file = path.split('.')
-        with open(f'{self._datasource}/{file[0]}-{timestamp}.json', 'w') as f:
+        odir_path = f'{self._datasource}/{file[0]}/{timestamp}'
+        mkdirs(odir_path)
+        with open(f'{odir_path}/1.json', 'w') as f:
             json.dump(result.json(), f, indent = 4)
 

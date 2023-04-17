@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+global_params = {
+    "temp_dir" : "data"
+}
+    
 ## collector 
 dolibarr = {
     "datasource_name": "dolibarr",

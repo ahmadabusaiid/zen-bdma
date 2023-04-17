@@ -37,3 +37,8 @@ class HDFSLoader(Loader):
                 jsons_df.write.mode('append').parquet(f'hdfs://{self._uri}/{directory}.parquet')
             
             i += 1
+
+hdfs = HDFSLoader()
+input_dir = configs.global_params['temp_dir']
+path = 'weatherapi/forecast/2023-04-17'
+hdfs.write(f'{Path.home()}/{input_dir}/{path}')
