@@ -30,7 +30,7 @@ class HDFSLoader(Loader):
 
         i = 0
         for file in files:
-            jsons_df = self._spark.read.option("multiline","true").json( f'{directory}/{file}')
+            jsons_df = self._spark.read.option("multiline","true").json( f'{Path.home()}/{input_dir}/{directory}/{file}')
 
             if i == 0:
                 jsons_df.write.parquet(f'hdfs://{self._uri}/{directory}')
