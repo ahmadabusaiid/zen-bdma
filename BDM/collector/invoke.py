@@ -4,12 +4,15 @@ import xmlrpc.client
 import json
 from abc import abstractmethod
 from dolibarr import Dolibarr
-import configs
 import requests
 import datetime
 import os
 import errno
 from pathlib import Path
+import sys
+ 
+sys.path.insert(0, os.path.dirname(Path(__file__).parent.absolute()))
+import configs as configs
 
 class Invoker:
 

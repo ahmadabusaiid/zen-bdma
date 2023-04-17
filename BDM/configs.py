@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+## collector 
 dolibarr = {
     "datasource_name": "dolibarr",
     "host_path" : '10.4.41.57:80',
@@ -24,4 +25,10 @@ weather_api = {
         "end_date" :"2020-01-02"
     }
 
+}
+
+## persistent loader
+
+hdfs = {
+    "host_path" : '10.4.41.57:9870'
 }

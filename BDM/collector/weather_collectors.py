@@ -1,6 +1,10 @@
 from invoke import WeatherAPIInvoker
-import configs
-
+import os
+from pathlib import Path
+import sys
+ 
+sys.path.insert(0, os.path.dirname(Path(__file__).parent.absolute()))
+import configs as configs
 wi = WeatherAPIInvoker()
 
 # weather forcast
