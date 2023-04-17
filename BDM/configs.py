@@ -34,5 +34,5 @@ weather_api = {
 ## persistent loader
 
 hdfs = {
-    "host_path" : '10.4.41.57:9870'
+    "host_path" : '10.4.41.57:27000'
 }

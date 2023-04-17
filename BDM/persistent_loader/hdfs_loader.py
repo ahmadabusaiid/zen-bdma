@@ -10,7 +10,7 @@ import configs as configs
 class Loader:
 
     def __init__(self, uri):
-        self._uri = uri
+        self._uri = f'{uri}/user/bdm'
 
     @abstractmethod
     def write(self):
@@ -25,20 +25,21 @@ class HDFSLoader(Loader):
     
     def write(self, directory):
 
-        files = os.listdir(directory)
+        input_dir = configs.global_params['temp_dir']
+        files = os.listdir(f'{Path.home()}/{input_dir}/{directory}')
 
         i = 0
         for file in files:
-            jsons_df = self._spark.read.json( f'{directory}/{file}')
+            jsons_df = self._spark.read.option("multiline","true").json( f'{directory}/{file}')
 
             if i == 0:
-                jsons_df.write.parquet(f'{directory}.parquet')
+                jsons_df.write.parquet(f'hdfs://{self._uri}/{directory}')
             else :
-                jsons_df.write.mode('append').parquet(f'hdfs://{self._uri}/{directory}.parquet')
+                jsons_df.write.mode('append').parquet(f'hdfs://{self._uri}/{directory}')
             
             i += 1
 
 hdfs = HDFSLoader()
-input_dir = configs.global_params['temp_dir']
+
 path = 'weatherapi/forecast/2023-04-17'
-hdfs.write(f'{Path.home()}/{input_dir}/{path}')
+hdfs.write(path)
