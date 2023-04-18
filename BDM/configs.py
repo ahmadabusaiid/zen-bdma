@@ -15,7 +15,7 @@ dolibarr = {
 odoo = {
     "datasource_name": "odoo",
     "server_url" : "https://demo.odoo.com/start",
-    "limit": 10
+    "limit": 1000
 }
 
 weather_api = {

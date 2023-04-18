@@ -8,6 +8,17 @@ import configs as configs
 
 oi = OdooInvoker()
 
+
+def get_model(model, filters, features):
+
+    global oi
+    limit = configs.odoo['limit'] ## common limit for pagination
+
+    count = oi.query(model = model, filter = filters, action = 'search_count', features = features)
+    for offset in range (0, count, limit):
+        oi.query(model = model, filter = filters, action = 'search_read', features = features, limit = limit, offset = offset)
+
+
 # inventory stock collector
 
 model_name = 'stock.report'
@@ -31,13 +42,7 @@ features = [
     'scheduled_date',
     'stock_value'
 ]
-
-limit = configs.odoo['limit']
-count = oi.query(model = model_name, filter = filters, action = 'search_count', features = features)
-for offset in range (0, count, limit):
-    oi.query(model = model_name, filter = filters, action = 'search_read', features = features, limit = limit, offset = offset)
-
-
+get_model(model_name, filters, features)
 
 # Invoice collector
 
@@ -58,8 +63,4 @@ features = [
     'price_total',
     'partner_id'
 ]
-
-limit = configs.odoo['limit']
-count = oi.query(model = model_name, filter = filters, action = 'search_count', features = features)
-for offset in range (0, count, limit):
-    oi.query(model = model_name, filter = filters, action = 'search_read', features = features, limit = limit, offset = offset)
+get_model(model_name, filters, features)

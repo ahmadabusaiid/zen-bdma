@@ -43,17 +43,25 @@ class DolibarrInvoker(Invoker):
         host_path = configs.dolibarr["host_path"]
         self._dolibarr_inst = Dolibarr(f'http://{host_path}/api/index.php/'.format(server=configs.dolibarr["host_path"]), configs.dolibarr["api_key"])
 
-        super().__init__(None, None,None, None, configs.dolibarr['datasource_name'])
+        super().__init__(None, None,None, configs.dolibarr['datasource_name'])
 
-    def query(self, model): 
+    def query(self, model, page = 0, limit = 1000, pagination_data = True): 
 
-        result = self._dolibarr_inst.call_list_api(model)
+        result = self._dolibarr_inst.call_list_api(model, { "page": page, "limit":limit, "pagination_data": pagination_data})
         timestamp = datetime.datetime.now().strftime('%Y-%m-%d')
 
         odir_path = f'{self._datasource}/{model}/{timestamp}'
-        mkdirs(self._datasource)
-        with open(f'{odir_path}/1.json', 'w') as f:
-            json.dump(result, f, indent = 4)
+        mkdirs(odir_path)
+
+        with open(f'{odir_path}/{page}.json', 'w') as f:
+
+            if type(result) == 'dict':
+                json.dump(result['data'], f, indent = 4)
+                return result['pagination']
+            else: 
+                json.dump(result, f, indent=4)
+                return 1
+        
 
 class OdooInvoker(Invoker):
 
