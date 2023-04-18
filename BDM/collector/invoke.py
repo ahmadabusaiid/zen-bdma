@@ -69,24 +69,39 @@ class OdooInvoker(Invoker):
         super().__init__(url, uid, password, configs.odoo['datasource_name'])
         self._db = db
 
-    def query(self, model, filter, features, limit):
+    def query(self, model, action, filter, features, limit = 1000, offset=0):
 
         models = xmlrpc.client.ServerProxy('{}/xmlrpc/2/object'.format(self._uri))
-        result = models.execute_kw(
-            self._db, 
-            self._username, 
-            self._password, 
-            model, # model
-            'search_read',
-            [filter], # filter
-            {'fields': features, 'limit': limit} # features, limit criterias etc.
-        )
 
-        timestamp = datetime.datetime.now().strftime('%Y-%m-%d')
-        odir_path = f'{self._datasource}/{model}/{timestamp}'
-        mkdirs(odir_path)
-        with open(f'{odir_path}/1.json', 'w') as f:
-            json.dump(result, f, indent = 4)
+        if action == 'search_read' : 
+            result = models.execute_kw(
+                self._db, 
+                self._username, 
+                self._password, 
+                model, # model
+                action,
+                [filter], # filter
+                {'fields': features, 'offset': offset, 'limit': limit} # features, limit criterias etc.
+            )
+
+            timestamp = datetime.datetime.now().strftime('%Y-%m-%d')
+            odir_path = f'{self._datasource}/{model}/{timestamp}'
+            mkdirs(odir_path)
+
+            with open(f'{odir_path}/{offset}.json', 'w') as f:
+                json.dump(result, f, indent = 4)
+
+        else:   ## for search_count api
+
+            result = models.execute_kw(
+                self._db, 
+                self._username, 
+                self._password, 
+                model, # model
+                action,
+                [filter], # filter
+            )
+            return result
 
 class WeatherAPIInvoker(Invoker):
     

@@ -8,12 +8,14 @@ global_params = {
 dolibarr = {
     "datasource_name": "dolibarr",
     "host_path" : '10.4.41.57:80',
-    "api_key" : "nd6hgbcr"
+    "api_key" : "nd6hgbcr",
+    "limit": 1000
 }
 
 odoo = {
     "datasource_name": "odoo",
-    "server_url" : "https://demo.odoo.com/start"
+    "server_url" : "https://demo.odoo.com/start",
+    "limit": 10
 }
 
 weather_api = {
