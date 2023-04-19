@@ -12,7 +12,7 @@ from pathlib import Path
 import sys
  
 sys.path.insert(0, os.path.dirname(Path(__file__).parent.absolute()))
-import configs as configs
+import configs.common as common
 
 
 def mkdirs (path):
@@ -29,7 +29,7 @@ class Invoker:
         self._uri = uri
         self._username = username
         self._password = password
-        output_dir = configs.global_params['temp_dir']
+        output_dir = common.global_params['temp_dir']
         self._datasource = f'{Path.home()}/{output_dir}/{datasource}'
         mkdirs(self._datasource)
 
@@ -40,41 +40,51 @@ class Invoker:
 class DolibarrInvoker(Invoker):
 
     def __init__(self):
-        host_path = configs.dolibarr["host_path"]
-        self._dolibarr_inst = Dolibarr(f'http://{host_path}/api/index.php/'.format(server=configs.dolibarr["host_path"]), configs.dolibarr["api_key"])
+        host_path = common.dolibarr["host_path"]
+        self._dolibarr_inst = Dolibarr(f'http://{host_path}/api/index.php/'.format(server=common.dolibarr["host_path"]), common.dolibarr["api_key"])
 
-        super().__init__(None, None,None, configs.dolibarr['datasource_name'])
+        super().__init__(None, None,None, common.dolibarr['datasource_name'])
 
-    def query(self, model, sqlfilters, page = 0, limit = 1000, pagination_data = True): 
+    def query(self, model, sqlfilters='', page = 0, limit = 1000, pagination_data = True): 
 
-        result = self._dolibarr_inst.call_list_api(model, { "page": page, "limit":limit, "pagination_data": pagination_data})
+        params = { "page": page, "limit":limit, "pagination_data": pagination_data }
+
+        if sqlfilters != '':
+            params['sqlfilters'] = sqlfilters
+        
+        result = self._dolibarr_inst.call_list_api(model, params)
+
+        if "error" in result:
+            error = result['error']
+            print (f'Error : invoker = Dolibarr, error_message = {error}')
+            return 1
+        
         timestamp = datetime.datetime.now().strftime('%Y-%m-%d')
-
         odir_path = f'{self._datasource}/{model}/{timestamp}'
         mkdirs(odir_path)
 
         with open(f'{odir_path}/{page}.json', 'w') as f:
 
-            if type(result) == 'dict':
+            if "data" in result:
                 json.dump(result['data'], f, indent = 4)
                 return result['pagination']
             else: 
                 json.dump(result, f, indent=4)
-                return 1
+                return {"page_count":1}
         
 
 class OdooInvoker(Invoker):
 
     def __init__(self):
 
-        info = xmlrpc.client.ServerProxy(configs.odoo['server_url']).start()
+        info = xmlrpc.client.ServerProxy(common.odoo['server_url']).start()
         url, db, username, password = info['host'], info['database'], info['user'], info['password']
 
-        common = xmlrpc.client.ServerProxy('{url}/xmlrpc/2/common'.format(url = url))
-        common.version()
-        uid = common.authenticate(db, username, password, {})
+        comm = xmlrpc.client.ServerProxy('{url}/xmlrpc/2/common'.format(url = url))
+        comm.version()
+        uid = comm.authenticate(db, username, password, {})
 
-        super().__init__(url, uid, password, configs.odoo['datasource_name'])
+        super().__init__(url, uid, password, common.odoo['datasource_name'])
         self._db = db
 
     def query(self, model, action, filter, features, limit = 1000, offset=0):
@@ -91,6 +101,9 @@ class OdooInvoker(Invoker):
                 [filter], # filter
                 {'fields': features, 'offset': offset, 'limit': limit} # features, limit criterias etc.
             )
+
+            if not result:
+                print (f'Info : invoker = Odoo, info = No results')
 
             timestamp = datetime.datetime.now().strftime('%Y-%m-%d')
             odir_path = f'{self._datasource}/{model}/{timestamp}'
@@ -115,7 +128,7 @@ class WeatherAPIInvoker(Invoker):
     
     def __init__(self):
 
-        super().__init__(configs.weather_api["server_url"], None, configs.weather_api["api_key"], configs.weather_api['datasource_name'])
+        super().__init__(common.weather_api["server_url"], None, common.weather_api["api_key"], common.weather_api['datasource_name'])
 
 
     def query(self, path, ext_params):

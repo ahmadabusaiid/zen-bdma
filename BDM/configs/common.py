@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
 global_params = {
-    "temp_dir" : "data"
+    "temp_dir" : "data",
+    "collectors": ["odoo","dolibarr","weatherapi"],
+    "loader" : "hdfs_loader"
 }
     
 ## collector 
@@ -36,5 +38,5 @@ weather_api = {
 ## persistent loader
 
 hdfs = {
-    "host_path" : '10.4.41.57:27000'
+    "host_path" : '10.4.41.57:27000/user/bdm'
 }

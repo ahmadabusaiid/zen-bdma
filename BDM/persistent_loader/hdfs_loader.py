@@ -10,7 +10,7 @@ import configs as configs
 class Loader:
 
     def __init__(self, uri):
-        self._uri = f'{uri}/user/bdm'
+        self._uri = f'{uri}'
 
     @abstractmethod
     def write(self):
@@ -38,8 +38,3 @@ class HDFSLoader(Loader):
                 jsons_df.write.mode('append').parquet(f'hdfs://{self._uri}/{directory}')
             
             i += 1
-
-hdfs = HDFSLoader()
-
-path = 'weatherapi/forecast/2023-04-17'
-hdfs.write(path)

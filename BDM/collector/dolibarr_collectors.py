@@ -1,45 +1,45 @@
-from invoke import DolibarrInvoker
+from collector.invoke import DolibarrInvoker
 from pathlib import Path
 import os
 import sys
-import datetime
 
 sys.path.insert(0, os.path.dirname(Path(__file__).parent.absolute()))
-import configs as configs
+import configs.common as common
 
-di = DolibarrInvoker()
-today = datetime.datetime.now().strftime('%Y-%m-%d')
+def get_model(di, model_name, filters):
 
-def get_model(model_name, filters):
+    limit = common.dolibarr['limit']
 
-    global di
-    limit = configs.dolibarr['limit']
+    pagination = di.query(model = model_name, sqlfilters = filters, page = 0 , limit = limit, pagination_data = True)
 
-    pagination = di.query(model = model_name, sqlfilters = filters, page = 1 , limit = limit, pagination_data = True)
-
-    for page in range (1, pagination):
+    for page in range (1, pagination['page_count']):
         di.query(model = model_name, sqlfilters = filters, page = page , limit = limit, pagination_data = True)    
 
-# product collector
+def collect(dolibarr_configs, date):
 
-model_name = 'products'
-filters = f'(tms:like:\'{today}%\')'
-get_model(model_name)
+    di = DolibarrInvoker()
 
+    for query_model in dolibarr_configs:
 
-# orders collector 
-model_name = 'orders'
-filters = f'(datec:like:\'{today}%\')'
-get_model(model_name)
+        filters = ''
+        if query_model['other_filters'] != None and query_model['other_filters'] != '':
+            filters = query_model['other_filters']
+        
+        date_filter = query_model['date_filter']
 
-# stockmovements collector
+        if date_filter['apply']:    ## add query by date or not
 
-model_name = 'stockmovements'
-filters = f'(tms:like:\'{today}%\')'
-get_model(model_name)
+            field = date_filter['field_name']
+            operator = date_filter['operator']
 
-# invoices collector
+            if date_filter['operator'] == 'like':
+                date_sqlfilter = f'({field}:{operator}:\'{date}%\')'
+            else :
+                date_sqlfilter = f'({field}:{operator}:\'{date}\')'
 
-model_name = 'invoices'
-filters = f'(datec:like:\'{today}%\')'
-get_model(model_name)
+            if filters == '':
+                filters = date_sqlfilter
+            else:
+                filters = f'{filters} and {date_sqlfilter}'
+
+        get_model(di, query_model['model'], filters)

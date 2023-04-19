@@ -1,0 +1,5 @@
+weatherapi=[
+    {
+        "model":"forecast"
+    }
+]
