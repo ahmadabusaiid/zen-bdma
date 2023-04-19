@@ -12,7 +12,7 @@ dolibarr = [
         "model":"orders",
         "date_filter":{
             "apply" : True,
-            "field_name":"t.datec",
+            "field_name":"date_creation",
             "operator": "like"
         },
         "other_filters": None
