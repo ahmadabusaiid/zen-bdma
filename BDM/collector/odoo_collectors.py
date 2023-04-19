@@ -2,12 +2,13 @@ from invoke import OdooInvoker
 from pathlib import Path
 import os
 import sys
+import datetime
  
 sys.path.insert(0, os.path.dirname(Path(__file__).parent.absolute()))
 import configs as configs
 
 oi = OdooInvoker()
-
+today = datetime.datetime.now().strftime('%Y-%m-%d')
 
 def get_model(model, filters, features):
 
@@ -22,8 +23,10 @@ def get_model(model, filters, features):
 # inventory stock collector
 
 model_name = 'stock.report'
+
 filters = [
-    ['state', '=', 'confirmed']
+    ['state', '=', 'confirmed'],
+    ['creation_date','like',f'{today}%'] ## '%Y-%m-%d %H:%M:%s'
 ]
 features = [
     'company_id',
@@ -48,7 +51,8 @@ get_model(model_name, filters, features)
 
 model_name = 'account.invoice.report'
 filters = [
-    ['state', '=', 'posted']
+    ['state', '=', 'posted'],
+    ['invoice_date','=',f'{today}'] ## '%Y-%m-%d
 ]
 features = [
     'company_id',

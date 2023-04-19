@@ -45,7 +45,7 @@ class DolibarrInvoker(Invoker):
 
         super().__init__(None, None,None, configs.dolibarr['datasource_name'])
 
-    def query(self, model, page = 0, limit = 1000, pagination_data = True): 
+    def query(self, model, sqlfilters, page = 0, limit = 1000, pagination_data = True): 
 
         result = self._dolibarr_inst.call_list_api(model, { "page": page, "limit":limit, "pagination_data": pagination_data})
         timestamp = datetime.datetime.now().strftime('%Y-%m-%d')
