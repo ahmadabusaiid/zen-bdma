@@ -52,12 +52,12 @@ class DolibarrInvoker(Invoker):
         if sqlfilters != '':
             params['sqlfilters'] = sqlfilters
         
+        print(params)
         result = self._dolibarr_inst.call_list_api(model, params)
-
         if "error" in result:
             error = result['error']
             print (f'Error : invoker = Dolibarr, error_message = {error}')
-            return 1
+            return {"page_count":1}
         
         timestamp = datetime.datetime.now().strftime('%Y-%m-%d')
         odir_path = f'{self._datasource}/{model}/{timestamp}'

@@ -3,7 +3,7 @@ dolibarr = [
         "model":"products",
         "date_filter":{
             "apply" : True,
-            "field_name":"tms",
+            "field_name":"t.tms",
             "operator": "like"
         },
         "other_filters": None
@@ -12,7 +12,7 @@ dolibarr = [
         "model":"orders",
         "date_filter":{
             "apply" : True,
-            "field_name":"datec",
+            "field_name":"t.datec",
             "operator": "like"
         },
         "other_filters": None
