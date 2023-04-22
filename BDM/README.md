@@ -11,7 +11,7 @@
 
 ##### Presistent Loaders
 
-1. Installation and setup of HDFS. 
+1. Having access to HDFS endpoint. 
 
 #### How to setup configurations
 
@@ -37,7 +37,12 @@
 -- HDFS on UPC virtual machine. 
 
 2. odoo.py, dolibarr.py, weatherapi.py:
-* Configure modules called per api. 
+* Configure modules and fields called per data source. 
+
+#### Run the Python code:
+
+1. Clone the project in the desired directory
+2. Run main.py
 
 
 
