@@ -15,6 +15,7 @@
 2. How to setup configurations
     In the configs folder:
         a. /common.py:
+        
             - Configure the api endpoints and keys.
 
             | Data source | Endpoint |
