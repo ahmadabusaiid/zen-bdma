@@ -13,8 +13,8 @@
         - Having access to the HDFS endpoint. 
 
 2. How to setup configurations
-    In the configs folder:
-        a. /common.py:
+    - In the configs folder:
+        1. /common.py:
         
             - Configure the api endpoints and keys.
 
@@ -35,7 +35,7 @@
             - Configure the persistent landing zone endpoint
                 - HDFS on the UPC virtual machine
 
-        b. Configure the data models, fields and other parameters for each data source
+        2. Configure the data models, fields and other parameters for each data source
             - odoo.py
             - dolibarr.py
             - weatherapi.py
@@ -43,7 +43,3 @@
 3. Run the pipeline:
     a. Clone the project to your desired directory
     b. Run main.py
-
-
-
-
