@@ -5,18 +5,20 @@
 ### Pipeline Reproducibility Steps
 
 1. Requirements:
-    a. Collectors
+
+    1. Collectors
         -   Having access to the Dolibarr endpoint. 
         -   Installation of Dolibarr and Odoo python libraries. 
 
-    b. Persistent Loaders
+    2. Persistent Loaders
         - Having access to the HDFS endpoint. 
 
 2. How to setup configurations
     - In the configs folder:
         1. /common.py:
         
-            - Configure the api endpoints and keys.
+            - Configure the api endpoints and keys
+
 
             | Data source | Endpoint |
             | ------ | ------ |
@@ -24,7 +26,8 @@
             | Dolibarr | Application was setup and installed on UPC Virtual Machine|
             | Weather api | Free public access to their api |
 
-            - Limit of records retrieved from the data sources.
+            - Limit of records retrieved from the data sources
+
 
             | Data source | Limit |
             | ------ | ------ |
