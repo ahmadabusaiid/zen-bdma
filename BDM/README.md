@@ -45,4 +45,5 @@
 
 3. **Run the pipeline:**
     1. Clone the project to your desired directory
-    2. Run main.py
+    2. pip install -r ./requirements.txt
+    3. Run main.py
