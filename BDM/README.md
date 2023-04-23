@@ -44,5 +44,5 @@
             - weatherapi.py
 
 3. **Run the pipeline:**
-    a. Clone the project to your desired directory
-    b. Run main.py
+    1. Clone the project to your desired directory
+    2. Run main.py
