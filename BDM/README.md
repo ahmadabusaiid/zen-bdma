@@ -4,7 +4,7 @@
 
 ### Pipeline Reproducibility Steps
 
-1. Requirements:
+1. **Requirements:**
 
     1. Collectors
         -   Having access to the Dolibarr endpoint. 
@@ -13,7 +13,7 @@
     2. Persistent Loaders
         - Having access to the HDFS endpoint. 
 
-2. How to setup configurations
+2. **How to setup configurations**
     - In the configs folder:
         1. /common.py:
         
@@ -43,6 +43,6 @@
             - dolibarr.py
             - weatherapi.py
 
-3. Run the pipeline:
+3. **Run the pipeline:**
     a. Clone the project to your desired directory
     b. Run main.py
