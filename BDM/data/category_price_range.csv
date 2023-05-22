@@ -1,0 +1,17 @@
+type,min,max
+Fruits&Vegetables,2,6
+Dairy,1,5
+Bakery,0.75,7
+Plants,1,6
+Meats,4,10
+Beverages,1,3
+Snacks,2,8
+Alcohol,15,25
+Dry/Baking Goods,1,5
+Instant Foods,2,6
+Household items,3,7
+Other,1,3
+Pets,5,10
+Self-care,3,10
+Condiments,2,7
+Organic,5,10

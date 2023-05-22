@@ -1,0 +1,168 @@
+product,product_id,type
+Tropical Fruit,P0001,Fruits&Vegetables
+Whole Milk,P0002,Dairy
+Pip Fruit,P0003,Fruits&Vegetables
+Other Vegetables,P0004,Fruits&Vegetables
+Rolls/Buns,P0005,Bakery
+Pot Plants,P0006,Plants
+Citrus Fruit,P0007,Fruits&Vegetables
+Beef,P0008,Meats
+Frankfurter,P0009,Meats
+Chicken,P0010,Meats 
+Butter,P0011,Dairy
+Fruit/Vegetable Juice,P0012,Beverages
+Packaged Fruit/Vegetables,P0013,Fruits&Vegetables
+Chocolate,P0014,Snacks
+Specialty Bar,P0015,Snacks
+Butter Milk,P0016,Dairy
+Bottled Water,P0017,Beverages
+Yogurt,P0018,Dairy
+Sausage,P0019,Meats
+Brown Bread,P0020,Bakery
+Hamburger Meat,P0021,Meats
+Root Vegetables,P0022,Fruits&Vegetables
+Pork,P0023,Meats
+Pastry,P0024,Bakery
+Canned Beer,P0025,Alcohol
+Berries,P0026,Fruits&Vegetables
+Coffee,P0027,Beverages
+Misc. Beverages,P0028,Beverages
+Ham,P0029,Meats
+Turkey,P0030,Meats
+Curd Cheese,P0031,Dairy
+Red/Blush Wine,P0032,Alcohol
+Frozen Potato Products,P0033,Fruits&Vegetables
+Flour,P0034,Dry/Baking Goods
+Sugar,P0035,Dry/Baking Goods
+Frozen Meals,P0036,Instant Foods
+Herbs,P0037,Dry/Baking Goods
+Soda,P0038,Beverages
+Detergent,P0039,Household items
+Grapes,P0040,Fruits&Vegetables
+Processed Cheese,P0041,Dairy
+Fish,P0042,Meats
+Sparkling Wine,P0043,Alcohol
+Newspapers,P0044,Other
+Curd,P0045,Dairy
+Pasta,P0046,Dry/Baking Goods
+Popcorn,P0047,Snacks
+Finished Products,P0048,Other
+Beverages,P0049,Beverages
+Bottled Beer,P0050,Alcohol
+Dessert,P0051,Snacks
+Dog Food,P0052,Pets
+Specialty Chocolate,P0053,Snacks
+Condensed Milk,P0054,Dairy
+Cleaner,P0055,Household items
+White Wine,P0056,Alcohol
+Meat,P0057,Meats
+Ice Cream,P0058,Dairy
+Hard Cheese,P0059,Dairy
+Cream Cheese ,P0060,Dairy
+Liquor,P0061,Alcohol
+Pickled Vegetables,P0062,Fruits&Vegetables
+Liquor (Appetizer),P0063,Alcohol
+Uht-Milk,P0064,Dairy
+Candy,P0065,Snacks
+Onions,P0066,Fruits&Vegetables
+Hair Spray,P0067,Self-care
+Photo/Film,P0068,Other
+Domestic Eggs,P0069,Dairy
+Margarine,P0070,Dairy
+Shopping Bags,P0071,Household items
+Salt,P0072,Dry/Baking Goods
+Oil,P0073,Condiments
+Whipped/Sour Cream,P0074,Dairy
+Frozen Vegetables,P0075,Fruits&Vegetables
+Sliced Cheese,P0076,Dairy
+Dish Cleaner,P0077,Household items
+Baking Powder,P0078,Dry/Baking Goods
+Specialty Cheese,P0079,Dairy
+Salty Snack,P0080,Snacks
+Instant Food Products,P0081,Instant Foods
+Pet Care,P0082,Pets
+White Bread,P0083,Bakery
+Female Sanitary Products,P0084,Self-care
+Cling Film/Bags,P0085,Household items
+Soap,P0086,Self-care
+Frozen Chicken,P0087,Meats
+House Keeping Products,P0088,Household items
+Spread Cheese,P0089,Dairy
+Decalcifier,P0090,Household items
+Frozen Dessert,P0091,Snacks
+Vinegar,P0092,Condiments
+Nuts/Prunes,P0093,Fruits&Vegetables
+Potato Products,P0094,Fruits&Vegetables
+Frozen Fish,P0095,Meats
+Hygiene Articles,P0096,Self-care
+Artif. Sweetener,P0097,Dry/Baking Goods
+Light Bulbs,P0098,Household items
+Canned Vegetables,P0099,Fruits&Vegetables
+Chewing Gum,P0100,Snacks
+Canned Fish,P0101,Meats
+Cookware,P0102,Household items
+Semi-Finished Bread,P0103,Bakery
+Cat Food,P0104,Pets
+Bathroom Cleaner,P0105,Household items
+Prosecco,P0106,Alcohol
+Liver Loaf,P0107,Meats
+Zwieback,P0108,Bakery
+Canned Fruit,P0109,Fruits&Vegetables
+Frozen Fruits,P0110,Fruits&Vegetables
+Brandy,P0111,Alcohol
+Baby Cosmetics,P0112,Self-care
+Spices,P0113,Dry/Baking Goods
+Napkins,P0114,Household items
+Waffles,P0115,Snacks
+Sauces,P0116,Condiments
+Rum,P0117,Alcohol
+Chocolate Marshmallow,P0118,Snacks
+Long Life Bakery Product,P0119,Bakery
+Bags,P0120,Household items
+Sweet Spreads,P0121,Condiments
+Soups,P0122,Instant Foods
+Mustard,P0123,Condiments
+Specialty Fat,P0124,Meats
+Instant Coffee,P0125,Beverages
+Snack Products,P0126,Snacks
+Organic Sausage,P0127,Organic
+Soft Cheese,P0128,Dairy
+Mayonnaise,P0129,Condiments
+Dental Care,P0130,Self-care
+Roll Products ,P0131,Household items
+Kitchen Towels,P0132,Household items
+Flower Soil/Fertilizer,P0133,Plants
+Cereals,P0134,Instant Foods
+Meat Spreads,P0135,Meats
+Dishes,P0136,Household items
+Male Cosmetics,P0137,Self-care
+Candles,P0138,Household items
+Whisky,P0139,Alcohol
+Tidbits,P0140,Snacks
+Cooking Chocolate,P0141,Dry/Baking Goods
+Seasonal Products,P0142,Organic
+Liqueur,P0143,Alcohol
+Abrasive Cleaner,P0144,Household items
+Syrup,P0145,Condiments
+Ketchup,P0146,Condiments
+Cream,P0147,Dairy
+Skin Care,P0148,Self-care
+Rubbing Alcohol,P0149,Self-care
+Nut Snack,P0150,Snacks
+Cocoa Drinks,P0151,Beverages
+Softener,P0152,Household items
+Organic Products,P0153,Organic
+Cake Bar,P0154,Snacks
+Honey,P0155,Condiments
+Jam,P0156,Condiments
+Kitchen Utensil,P0157,Household items
+Flower (Seeds),P0158,Plants
+Rice,P0159,Dry/Baking Goods
+Tea,P0160,Beverages
+Salad Dressing,P0161,Condiments
+Specialty Vegetables,P0162,Fruits&Vegetables
+Pudding Powder,P0163,Dry/Baking Goods
+Ready Soups,P0164,Instant Foods
+Make Up Remover,P0165,Self-care
+Toilet Cleaner,P0166,Household items
+Preservation Products,P0167,Other
