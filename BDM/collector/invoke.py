@@ -145,3 +145,18 @@ class WeatherAPIInvoker(Invoker):
         with open(f'{odir_path}/1.json', 'w') as f:
             json.dump(result.json(), f, indent = 4)
 
+class INEAPIInvoker(Invoker):
+    
+    def __init__(self):
+        super().__init__(common.ine_api['server_url'], None, None, common.ine_api['datasource_name'])
+
+    def query(self, path, file, ext_params):
+        
+        result = requests.get('{server_url}/{path}'.format(server_url = self._uri, path = path), params = ext_params)
+
+        timestamp = datetime.datetime.now().strftime('%Y-%m-%d')
+        
+        odir_path = f'{self._datasource}/{file}/{timestamp}'
+        mkdirs(odir_path)
+        with open(f'{odir_path}/1.json', 'w') as f:
+            json.dump(result.json(), f, indent = 4)

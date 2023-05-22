@@ -2,7 +2,7 @@ odoo = [
     {
         "model": 'stock.report',
         "date_filter":{
-            "apply" : True,
+            "apply" : False,
             "field_name":"creation_date",
             "operator": "like"
         },
@@ -30,7 +30,7 @@ odoo = [
     {
         "model": 'account.invoice.report',
         "date_filter":{
-            "apply" : True,
+            "apply" : False,
             "field_name":"invoice_date",
             "operator": "="
         },

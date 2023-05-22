@@ -2,7 +2,7 @@ dolibarr = [
     {
         "model":"products",
         "date_filter":{
-            "apply" : True,
+            "apply" : False,
             "field_name":"t.tms",
             "operator": "like"
         },
@@ -11,7 +11,7 @@ dolibarr = [
     {
         "model":"orders",
         "date_filter":{
-            "apply" : True,
+            "apply" : False,
             "field_name":"date_creation",
             "operator": "like"
         },
@@ -20,7 +20,7 @@ dolibarr = [
     {
         "model":"stockmovements",
         "date_filter":{
-            "apply" : True,
+            "apply" : False,
             "field_name":"tms",
             "operator": "like"
         },
@@ -29,7 +29,7 @@ dolibarr = [
     {
         "model":"invoices",
         "date_filter":{
-            "apply" : True,
+            "apply" : False,
             "field_name":"datec",
             "operator": "like"
         },
