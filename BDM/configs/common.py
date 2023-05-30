@@ -39,8 +39,8 @@ ine_api = {
     "datasource_name": "ine",
     "server_url" : "https://servicios.ine.es/wstempus/js/ES",
     "provincial": {
-        "start_date": "2022-07-01",
-        "end_date" :"2023-05-01"      
+        "start_date": "2014-01-01",
+        "end_date" :"2018-01-01"      
     }
 }
 
@@ -48,4 +48,10 @@ ine_api = {
 
 hdfs = {
     "host_path" : '10.4.41.57:27000/user/bdm'
+}
+
+##spark
+
+spark = {
+    "appName" : "formatter"
 }
