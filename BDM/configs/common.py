@@ -3,7 +3,8 @@
 global_params = {
     "temp_dir" : "data",
     "collectors": ["ineapi"],
-    "loader" : "hdfs_loader"
+    "loader" : "hdfs_loader",
+    "branch_id":"BCN"
 }
     
 ## collector 
@@ -54,4 +55,15 @@ hdfs = {
 
 spark = {
     "appName" : "formatter"
+}
+
+##formatted_zone_storage
+
+monetdb = {
+    "host_path": "monetdb://localhost:50000",
+    "database" :"monetdb",
+    "user" :"monetdb",
+    "password" :"bdm",
+    "driver" : "org.monetdb.jdbc.MonetDriver"
+    "driver_path" : "/home/bdm/BDM_Software/spark/jars/monetdb-jdbc-3.3.jre8.jar"
 }

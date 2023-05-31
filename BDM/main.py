@@ -13,6 +13,7 @@ from persistent_loader import hdfs_loader
 import datetime
 
 today = datetime.datetime.now().strftime('%Y-%m-%d')
+branch_name = common_configs.global_params['branch_id']
 
 print("================== Initiate : Temporary Landing Zone ==================")
 
@@ -50,7 +51,7 @@ if common_configs.global_params['loader'] == 'hdfs_loader':
 
         for model in collector_config:
             model_name = model['model']
-            path = f'{collector_name}/{model_name}/{today}'
+            path = f'{branch_name}/{collector_name}/{model_name}/{today}'
             hdfs.write(path)
 
 print("================== Initiate : Persistent Landing Zone ==================")
