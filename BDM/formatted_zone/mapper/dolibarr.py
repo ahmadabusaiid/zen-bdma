@@ -24,19 +24,19 @@ spark = SparkSession.builder.config(conf=conf).master("local").appName(common.sp
 dolibarr_invoices=spark.read.parquet(f'hdfs://{hdfs_host}/{branch_id}/dolibarr/invoices/2023-05-26').cache()
 
 transcations = dolibarr_invoices.select('date_creation', 'id','ref_customer', 'totalpaid')
-db_loader.write_to_db(transcations, 'transaction')
+db_loader.write_to_table(transcations, 'transaction')
 
 customer_details = dolibarr_invoices.select('ref_customer','firstname','lastname').distinct()
-db_loader.write_to_db(customer_details, 'customer')
+db_loader.write_to_table(customer_details, 'customer')
 
 sales = dolibarr_invoices.select('date_creation','id',explode(dolibarr_invoices.lines).alias('product'))\
 .select('date_creation','id','product.product_ref','product.price','product.qty')
-db_loader.write_to_db(sales, 'sales')
+db_loader.write_to_table(sales, 'sales')
 
 dolibarr_products=spark.read.parquet(f'hdfs://{hdfs_host}/{branch_id}/dolibarr/products/2023-05-26').cache()
 
 product_prices = dolibarr_products.select('date_modification','id','price','cost_price')
-db_loader.write_to_db(product_prices, 'product_prices')
+db_loader.write_to_table(product_prices, 'product_prices')
 
 products = dolibarr_products.select('id','label','description','type').distinct()
-db_loader.write_to_db(products, 'product')
+db_loader.write_to_table(products, 'product')
