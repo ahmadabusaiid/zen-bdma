@@ -64,6 +64,6 @@ monetdb = {
     "database" :"monetdb",
     "user" :"monetdb",
     "password" :"bdm",
-    "driver" : "org.monetdb.jdbc.MonetDriver"
+    "driver" : "org.monetdb.jdbc.MonetDriver",
     "driver_path" : "/home/bdm/BDM_Software/spark/jars/monetdb-jdbc-3.3.jre8.jar"
 }
