@@ -30,7 +30,8 @@ class Invoker:
         self._username = username
         self._password = password
         output_dir = common.global_params['temp_dir']
-        self._datasource = f'{Path.home()}/{output_dir}/{datasource}'
+        branch_id = common.global_params['branch_id']
+        self._datasource = f'{Path.home()}/{output_dir}/{branch_id}/{datasource}'
         mkdirs(self._datasource)
 
     @abstractmethod

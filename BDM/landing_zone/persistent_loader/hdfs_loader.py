@@ -26,7 +26,8 @@ class HDFSLoader(Loader):
     def write(self, directory):
 
         input_dir = configs.global_params['temp_dir']
-        files = os.listdir(f'{Path.home()}/{input_dir}/{directory}')
+        branch_id = configs.global_params['branch_id']
+        files = os.listdir(f'{Path.home()}/{input_dir}/{branch_id}/{directory}')
 
         i = 0
         for file in files:
