@@ -9,7 +9,7 @@ class DBLoader:
 
     def __init__(self):
         
-        self._driver_path = common.spark['db_driver']
+        self._driver_path = common.monetdb['driver_path']
         self._host = common.monetdb['host_path']
         self._db = common.monetdb['database']
         self._username = common.monetdb['user']
