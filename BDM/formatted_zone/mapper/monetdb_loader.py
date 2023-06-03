@@ -19,9 +19,10 @@ class DBLoader:
     def get_driver_path (self):
         return self._driver_path
     
-    def write_to_table(self, dataframe, table_name):
+    def write_to_table(self, dataframe, table_name, repartitions = 8):
 
-        dataframe.write \
+        dataframe.repartition(repartitions) \
+        .write \
         .format("jdbc") \
         .option("url", f"jdbc:{self._host}/{self._db}") \
         .option("dbtable", table_name) \
