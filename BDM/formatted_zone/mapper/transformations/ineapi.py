@@ -1,9 +1,7 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import explode
 from pyspark.sql.functions import *
 from pyspark.sql.functions import split
 from pyspark.conf import SparkConf
-from monetdb_loader import DBLoader
 from pathlib import Path
 import os
 import sys
@@ -11,6 +9,7 @@ import math
 
 sys.path.insert(0, os.path.dirname(Path(__file__).parent.absolute()))
 import configs.common as common
+from monetdb_loader import DBLoader
 
 df_rows = 250
 # today = '2023-06-05'
