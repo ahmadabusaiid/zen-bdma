@@ -1,3 +1,6 @@
+
+-- ************************TABLE********************************
+
 CREATE SCHEMA client; 
 
 CREATE TABLE client.products(
@@ -83,3 +86,18 @@ CREATE TABLE client.sales(
 	FOREIGN KEY(invoice_id) REFERENCES transactions(invoice_id)
 );
 
+-- ************************INDEX********************************
+
+drop index stock_in_date;
+drop index inventory_date;
+drop index product_pricing_date;
+drop index transaction_date;
+drop index sales_date;
+
+create index stock_in_date on client.stocks(date);
+create index inventory_date on client.inventory(date);
+create index product_pricing_date on client.product_prices(date);
+create index transaction_date on client.transactions(date);
+create index sales_date on client.sales(date);
+
+----------------------------------------------------------------
