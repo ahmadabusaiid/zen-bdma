@@ -51,7 +51,12 @@ if common_configs.global_params['loader'] == 'hdfs_loader':
 
         for model in collector_config:
             model_name = model['model']
-            path = f'{branch_name}/{collector_name}/{model_name}/{today}'
+            if collector_name == 'dolibarr' or collector_name == 'odoo':
+                path = f'{branch_name}/{collector_name}/{model_name}/{today}'
+                print(path)
+            else: 
+                path = f'{collector_name}/{model_name}/{today}'
+                print(path)
             hdfs.write(path)
 
 print("================== Initiate : Persistent Landing Zone ==================")
