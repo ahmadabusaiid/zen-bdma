@@ -14,7 +14,6 @@ CREATE TABLE client.stocks(
 	product_id string NOT NULL,
 	quantity integer NOT NULL,
 	expiry_date date NOT NULL,
-	in_shelf boolean NOT NULL,
 	branch_id string NOT NULL,
 	FOREIGN KEY(product_id) REFERENCES client.products(product_id)
 );

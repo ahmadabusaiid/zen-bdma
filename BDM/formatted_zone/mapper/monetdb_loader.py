@@ -19,7 +19,7 @@ class DBLoader:
     def get_driver_path (self):
         return self._driver_path
     
-    def write_to_table(self, dataframe, table_name, repartitions = 8):
+    def write_to_table(self, dataframe, table_name, repartitions = 8, mode = 'append', truncate = False):
 
         dataframe.repartition(repartitions) \
         .write \
@@ -29,7 +29,21 @@ class DBLoader:
         .option("user", self._username) \
         .option("password", self._password) \
         .option("driver", self._driver) \
-        .mode('append')\
+        .option("truncate", truncate) \
+        .mode(mode)\
         .save()
 
         print (f"Loaded {table_name}..")
+
+
+    def read_table(self, spark , query):
+            df = spark.read \
+                    .format("jdbc") \
+                    .option("url", f"jdbc:{self._host}/{self._db}") \
+                    .option("driver", self._driver) \
+                    .option("query", query) \
+                    .option("user", self._username) \
+                    .option("password", self._password) \
+                    .load()
+            
+            return df 
