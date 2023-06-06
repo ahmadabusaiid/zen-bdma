@@ -12,15 +12,13 @@ import configs.common as common
 from monetdb_loader import DBLoader
 
 df_rows = 250
-# today = '2023-05-31'
-def map_to_db(today):
+def map_to_db(today, branch_id):
 
     try : 
         db_loader = DBLoader()
         driver_path = db_loader.get_driver_path()
 
         hdfs_host = common.hdfs['host_path']
-        branch_id = common.global_params['branch_id']
 
         conf = SparkConf()
         conf.set("spark.jars", driver_path)
@@ -66,5 +64,3 @@ def map_to_db(today):
     
     except:
         print('Mapping data from file to database failed.')
-
-# map_to_db(today)

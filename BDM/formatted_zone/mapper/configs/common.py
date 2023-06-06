@@ -2,7 +2,8 @@
 
 global_params = {
     "temp_dir" : "data",
-    "branch_id":"BCN"
+    "branch_id":"BCN",
+    "load_sources" :['dolibarr','ineapi','weatherapi']
 }
     
 ## persistent loader

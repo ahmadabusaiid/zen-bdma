@@ -12,7 +12,6 @@ import configs.common as common
 from monetdb_loader import DBLoader
 
 df_rows = 250
-# today = '2023-06-05'
 def map_to_db(today):
 
     try : 
@@ -27,6 +26,7 @@ def map_to_db(today):
         spark = SparkSession.builder.config(conf=conf).master("local").appName(common.spark['appName']).getOrCreate()
 
         ine =spark.read.parquet(f'hdfs://{hdfs_host}/ineapi/population/{today}').cache()
+
         population = ine.select(col('COD').alias('cod'),col('Nombre').alias('title'),col('Data.Fecha')[0].alias("epoch"),col('Data.Anyo')[0].alias('for_year'),col('Data.Valor')[0].alias('population_count'))\
                     .withColumn('region', when(col('title').contains('Nacional'),'National').otherwise(split('title','\\.')[1]))\
                     .withColumn('type', when(col('title').contains('Total.'),'Total').otherwise(split('title','\\.')[2]))\
@@ -39,5 +39,3 @@ def map_to_db(today):
  
     except:
         print('Mapping data from file to database failed.')
-
-# map_to_db(today)

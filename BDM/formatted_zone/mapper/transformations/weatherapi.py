@@ -1,11 +1,9 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import explode
 from pyspark.sql.functions import *
 from pyspark.conf import SparkConf
 from pathlib import Path
 import os
 import sys
-import math
 
 sys.path.insert(0, os.path.dirname(Path(__file__).parent.absolute()))
 import configs.common as common
