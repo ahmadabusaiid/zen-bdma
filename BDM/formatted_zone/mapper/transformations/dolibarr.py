@@ -1,4 +1,5 @@
 from pyspark.sql import SparkSession
+from pyspark.sql.types import StructType, StructField, StringType
 from pyspark.sql.functions import explode
 from pyspark.sql.functions import *
 from pyspark.conf import SparkConf
@@ -12,6 +13,44 @@ import configs.common as common
 from monetdb_loader import DBLoader
 
 df_rows = 250
+
+productSchema = StructType([
+    StructField("product_id",StringType(),True),
+    StructField("label",StringType(),True),
+    StructField("description",StringType(),False),
+    StructField("type", StringType(), True),
+    StructField("branch_id", StringType(), True)
+  ])
+
+customerSchema = StructType([
+    StructField("customer_id",StringType(),True),
+    StructField("first_name",StringType(),True),
+    StructField("last_name",StringType(),True),
+    StructField("branch_id", StringType(), True)
+  ])
+
+def update_products(product):
+    
+    if product['product_id'] == None :
+        product['product_id'] = product['ex_product_id']
+        product['label'] = product['ex_label']
+        product['description'] = product['ex_description']
+        product['type'] = product['ex_type']
+        product['branch_id'] = product['ex_branch_id']
+    
+    return (product['product_id'],product['label'],product['description'],product['type'],product['branch_id'])
+
+def update_customer_details(customer):
+    
+    if customer['customer_id'] == None :
+
+        customer['customer_id'] = product['ex_customer_id']
+        customer['first_name'] = customer['ex_first_name']
+        customer['last_name'] = customer['ex_last_name']
+        customer['branch_id'] = customer['ex_branch_id']
+    
+    return (customer['customer_id'],customer['first_name'],customer['last_name'],customer['branch_id'])
+
 def map_to_db(today, branch_id):
 
     try : 
@@ -22,6 +61,7 @@ def map_to_db(today, branch_id):
 
         conf = SparkConf()
         conf.set("spark.jars", driver_path)
+        conf.set("spark.sql.execution.arrow.pyspark.enabled", "true")
 
         spark = SparkSession.builder.config(conf=conf).master("local").appName(common.spark['appName']).getOrCreate()
 
@@ -38,24 +78,23 @@ def map_to_db(today, branch_id):
 
             if i == 'products':
 
+                ## Drop foreign key 
+                db_loader.run_query( "ALTER TABLE IF EXISTS client.product_prices DROP CONSTRAINT product_prices_product_id_fkey;")
+                db_loader.run_query("ALTER TABLE IF EXISTS client.stocks DROP CONSTRAINT stocks_product_id_fkey;")
+                
                 ## Products table -> update
                 products = dolibarr_products.select(col('id').alias('product_id'),'label','description','type').distinct().withColumn('branch_id',lit(branch_id))
-                ex_products = db_loader.read_table(spark, 'SELECT * FROM client.products;')
-
-                def update_ex_products(product):
-                    
-                    if ex_products.filter("product_id = $product", product=product['product_id']) :
-
-                        ex_products.withColumn('label', when(col('product_id')== product['product_id'], product['label'])) \
-                        .withColumn('description', when(col('product_id')== product['product_id'], product['description'])) \
-                        .withColumn('type', when(col('product_id')== product['product_id'], product['type'])) \
-                        .withColumn('branch_id', when(col('product_id')== product['product_id'], product['branch_id']))
-                    else:
-                        ex_products = ex_products.union(product)
-
-                products.foreach(update_ex_products)
+                ex_products = db_loader.read_table(spark, \
+                    '''SELECT product_id as ex_product_id, label as ex_label, description as ex_description, type as ex_type, branch_id as ex_branch_id FROM client.products''')
+                j_products = products.join(ex_products, products.product_id ==  ex_products.ex_product_id, "outer")
+                j_products_rdd = j_products.rdd.map(update_products)
+                j_products_new = j_products_rdd.toDF(schema = productSchema)
                 
-                db_loader.write_to_table(ex_products, 'client.products', math.ceil(ex_products.count()/df_rows),'overwrite', True)
+                db_loader.write_to_table(j_products_new, 'client.products', math.ceil(j_products_new.count()/df_rows),'overwrite', True)
+
+                db_loader.run_query('''ALTER TABLE client.products ADD CONSTRAINT products_product_id_pkey PRIMARY KEY ("product_id");''')
+                db_loader.run_query('''ALTER TABLE client.product_prices ADD CONSTRAINT product_prices_product_id_fkey FOREIGN KEY ("product_id") REFERENCES client.products ("product_id");''')
+                db_loader.run_query('''ALTER TABLE client.stocks ADD CONSTRAINT stocks_product_id_fkey FOREIGN KEY ("product_id") REFERENCES client.products ("product_id");''')
             
             elif i == 'stocks':
 
@@ -80,23 +119,22 @@ def map_to_db(today, branch_id):
 
             elif i == 'customers':
 
+                ## Drop FKEY Constraints
+                db_loader.run_query( "ALTER TABLE IF EXISTS client.transactions DROP CONSTRAINT transactions_customer_id_fkey;")
+
                 ## Customers table -> update
                 customer_details = dolibarr_invoices.select(col('ref_customer').alias('customer_id'),col('firstname').alias('first_name'),col('lastname').alias('last_name')).distinct().withColumn('branch_id',lit(branch_id))
-                ex_customer_details = db_loader.read_table(spark, 'SELECT * FROM client.customers;')
+                ex_customer_details = db_loader.read_table(spark, '''SELECT customer_id as ex_customer_id, first_name as ex_first_name, last_name as ex_last_name, branch_id as ex_branch_id FROM client.customers''')
 
-                def update_ex_customer_details(customer):
-                    
-                    if ex_customer_details.filter("customer_id = $customer", customer=customer['customer_id']) :
+                j_customers = customer_details.join(ex_customer_details, customer_details.customer_id ==  ex_customer_details.ex_customer_id, "outer")
+                j_customers_rdd = j_customers.rdd.map(update_customer_details)
+                j_customers_new = j_customers_rdd.toDF(schema=customerSchema)
+                j_customers_new.show()
+                db_loader.write_to_table(j_customers_new, 'client.customers', math.ceil(j_customers_new.count()/df_rows),'overwrite', True)
 
-                        ex_customer_details.withColumn('first_name', when(col('customer_id')== customer['customer_id'], customer['first_name'])) \
-                        .withColumn('last_name', when(col('customer_id')== customer['customer_id'], customer['last_name']))\
-                        .withColumn('branch_id', when(col('customer_id')== customer['customer_id'], customer['branch_id']))
-                    else:
-                        ex_customer_details = ex_customer_details.union(customer)
-
-                customer_details.foreach(update_ex_customer_details)
-                db_loader.write_to_table(ex_customer_details, 'client.customers', math.ceil(ex_customer_details.count()/df_rows),'overwrite', True)
-
+                db_loader.run_query('''ALTER TABLE client.customers ADD CONSTRAINT customers_customer_id_pkey PRIMARY KEY ("customer_id");''')
+                db_loader.run_query('''ALTER TABLE client.transactions ADD CONSTRAINT transactions_customer_id_fkey FOREIGN KEY ("customer_id") REFERENCES client.customers ("customer_id");''')
+            
             elif i == 'transactions':
                 ## Transaction table -> append
                 transcations = dolibarr_invoices.select(col('id').alias('invoice_id'),col('date_creation').alias('date'),col('ref_customer').alias('customer_id'), col('totalpaid').alias('total_paid')).withColumn('branch_id',lit(branch_id))
@@ -123,6 +161,6 @@ def map_to_db(today, branch_id):
                 db_loader.write_to_table(sales, 'client.sales', math.ceil(sales_count/df_rows))
             else :
                 continue
-    
+        
     except:
         print('Mapping data from file to database failed.')

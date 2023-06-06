@@ -22,7 +22,8 @@ spark = {
 ##formatted_zone_storage
 
 monetdb = {
-    "host_path": "monetdb://localhost:50001",
+    "host_path": "localhost",
+    "port": 50001,
     "database" :"monetdb",
     "user" :"monetdb",
     "password" :"bdm",
