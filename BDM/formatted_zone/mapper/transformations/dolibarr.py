@@ -80,7 +80,7 @@ def map_to_db(today, branch_id):
 
                 ## Drop foreign key 
                 db_loader.run_query( "ALTER TABLE IF EXISTS client.product_prices DROP CONSTRAINT product_prices_product_id_fkey;")
-                db_loader.run_query("ALTER TABLE IF EXISTS client.stocks DROP CONSTRAINT stocks_product_id_fkey;")
+                db_loader.run_query("ALTER TABLE IF EXISTS client.shipments DROP CONSTRAINT shipments_product_id_fkey;")
                 
                 ## Products table -> update
                 products = dolibarr_products.select(col('id').alias('product_id'),'label','description','type').distinct().withColumn('branch_id',lit(branch_id))
@@ -94,27 +94,27 @@ def map_to_db(today, branch_id):
 
                 db_loader.run_query('''ALTER TABLE client.products ADD CONSTRAINT products_product_id_pkey PRIMARY KEY ("product_id");''')
                 db_loader.run_query('''ALTER TABLE client.product_prices ADD CONSTRAINT product_prices_product_id_fkey FOREIGN KEY ("product_id") REFERENCES client.products ("product_id");''')
-                db_loader.run_query('''ALTER TABLE client.stocks ADD CONSTRAINT stocks_product_id_fkey FOREIGN KEY ("product_id") REFERENCES client.products ("product_id");''')
+                db_loader.run_query('''ALTER TABLE client.shipments ADD CONSTRAINT shipments_product_id_fkey FOREIGN KEY ("product_id") REFERENCES client.products ("product_id");''')
             
-            elif i == 'stocks':
+            elif i == 'shipments':
 
                 ## Stocks table -> append
-                stocks = dolibarr_stock_in.select(col('id').alias('stock_id'),col('date_creation').alias('date'),col('product_id').alias('product_id'),col('qty').alias('quantity'),col('eatby').alias('expiry_date')).withColumn('branch_id',lit(branch_id))
-                db_loader.write_to_table(stocks, 'client.stocks', math.ceil(stocks.count()/df_rows))
+                shipments = dolibarr_stock_in.select(col('id').alias('shipment_id'),col('date_creation').alias('date'),col('product_id').alias('product_id'),col('qty').alias('quantity'),col('eatby').alias('expiry_date')).withColumn('branch_id',lit(branch_id))
+                db_loader.write_to_table(shipments, 'client.shipments', math.ceil(shipments.count()/df_rows))
             
             elif i == 'inventory':
 
 
                 ## Inventory table -> append
-                inventory = dolibarr_inventory.select('stock_id','date',col('qty').alias('quantity')).withColumn('branch_id',lit(branch_id))
+                inventory = dolibarr_inventory.select(col('stock_id').alias('shipment_id'),'date',col('qty').alias('quantity')).withColumn('branch_id',lit(branch_id))
                 db_loader.write_to_table(inventory, 'client.inventory', math.ceil(inventory.count()/df_rows))
             
             elif i == 'product_prices' :
 
                 ## Product prices table -> append
                 if product_prices == None:
-                    product_prices = dolibarr_products.select(col('date_modification').alias('date'),col('id').alias('product_id'),col('price').alias('selling_price'),'cost_price',col('fk_unit').alias('stock_id')).withColumn('sid',concat_ws('','date','product_id')).withColumn('branch_id',lit(branch_id))
-                    product_prices = product_prices.select('sid','date','product_id','selling_price','cost_price','stock_id','branch_id')
+                    product_prices = dolibarr_products.select(col('date_modification').alias('date'),col('id').alias('product_id'),col('price').alias('selling_price'),'cost_price',col('fk_unit').alias('shipment_id')).withColumn('sid',concat_ws('','date','product_id')).withColumn('branch_id',lit(branch_id))
+                    product_prices = product_prices.select('sid','date','product_id','selling_price','cost_price','shipment_id','branch_id')
                 db_loader.write_to_table(product_prices, 'client.product_prices', math.ceil(product_prices.count()/df_rows))
 
             elif i == 'customers':
@@ -144,8 +144,8 @@ def map_to_db(today, branch_id):
 
                 if product_prices == None:
                     
-                    product_prices = dolibarr_products.select(col('date_modification').alias('date'),col('id').alias('product_id'),col('price').alias('selling_price'),'cost_price',col('fk_unit').alias('stock_id')).withColumn('sid',concat_ws('','date','product_id')).withColumn('branch_id',lit(branch_id))
-                    product_prices = product_prices.select('sid','date','product_id','selling_price','cost_price','stock_id','branch_id')
+                    product_prices = dolibarr_products.select(col('date_modification').alias('date'),col('id').alias('product_id'),col('price').alias('selling_price'),'cost_price',col('fk_unit').alias('shipment_id')).withColumn('sid',concat_ws('','date','product_id')).withColumn('branch_id',lit(branch_id))
+                    product_prices = product_prices.select('sid','date','product_id','selling_price','cost_price','shipment_id','branch_id')
                 ## Sales table -> append
                 ##need to add if statement --> if an offer id exists, then set item_id to null and place the offer id .. for later 
                 ##for now i took socid as if its the offer_id :) 

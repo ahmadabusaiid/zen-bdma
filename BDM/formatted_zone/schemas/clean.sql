@@ -7,5 +7,5 @@ DROP TABLE IF EXISTS client.offer_details;
 DROP TABLE IF EXISTS client.transactions;
 DROP TABLE IF EXISTS client.customers;
 DROP TABLE IF EXISTS client.product_prices;
-DROP TABLE IF EXISTS client.stocks;
+DROP TABLE IF EXISTS client.shipments;
 DROP TABLE IF EXISTS client.products;

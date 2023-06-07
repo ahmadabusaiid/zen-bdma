@@ -11,8 +11,8 @@ CREATE TABLE client.products(
 	branch_id string NOT NULL
 );
 
-CREATE TABLE client.stocks(
-	stock_id string PRIMARY KEY,
+CREATE TABLE client.shipments(
+	shipment_id string PRIMARY KEY,
 	date date NOT NULL,
 	product_id string NOT NULL,
 	quantity integer NOT NULL,
@@ -22,11 +22,11 @@ CREATE TABLE client.stocks(
 );
 
 CREATE TABLE client.inventory(
-	stock_id string NOT NULL,
+	shipment_id string NOT NULL,
 	date date NOT NULL,
 	quantity integer NOT NULL,
 	branch_id string NOT NULL,
-	PRIMARY KEY(stock_id, date)
+	PRIMARY KEY(shipment_id, date)
 );
 
 CREATE TABLE client.offers(
@@ -43,10 +43,10 @@ CREATE TABLE client.product_prices(
 	product_id string NOT NULL,
 	selling_price float NOT NULL,
 	cost_price float NOT NULL,
-	stock_id string NOT NULL,
+	shipment_id string NOT NULL,
 	branch_id string NOT NULL,
 	FOREIGN KEY(product_id) REFERENCES products(product_id),
-	FOREIGN KEY(stock_id) REFERENCES stocks(stock_id)
+	FOREIGN KEY(shipment_id) REFERENCES stocks(shipment_id)
 );
 
 CREATE TABLE client.offer_details(
