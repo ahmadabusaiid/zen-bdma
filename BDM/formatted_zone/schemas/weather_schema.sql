@@ -2,14 +2,14 @@
 CREATE SCHEMA weather; 
 
 CREATE TABLE weather.forecast (
-    sid string PRIMARY KEY --name+forecast.forecastday.date
-    city_name string,
+    sid string PRIMARY KEY, --name+forecast.forecastday.date
+    city_name string NOT NULL,
     country string,
     region string, 
     latitude float,
-    longigtude float, 
+    longitude float, 
     time_zone string, 
-    date date, --forecast.forecastday.date
+    date date NOT NULL, --forecast.forecastday.date
     max_temp float, --forecast.forecastday.day.maxtemp_c
     min_temp float, --forecast.forecastday.day.mintemp_c 
     avg_temp float, 
