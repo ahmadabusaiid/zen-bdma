@@ -129,7 +129,7 @@ def map_to_db(today, branch_id):
                 j_customers = customer_details.join(ex_customer_details, customer_details.customer_id ==  ex_customer_details.ex_customer_id, "outer")
                 j_customers_rdd = j_customers.rdd.map(update_customer_details)
                 j_customers_new = j_customers_rdd.toDF(schema=customerSchema)
-                j_customers_new.show()
+
                 db_loader.write_to_table(j_customers_new, 'client.customers', math.ceil(j_customers_new.count()/df_rows),'overwrite', True)
 
                 db_loader.run_query('''ALTER TABLE client.customers ADD CONSTRAINT customers_customer_id_pkey PRIMARY KEY ("customer_id");''')

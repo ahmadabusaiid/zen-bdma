@@ -1,3 +1,3 @@
-from dolibarr import *
-from ineapi import *
-from weatherapi import *
+from transformations.ineapi import *
+from transformations.weatherapi import *
+from transformations.dolibarr import *

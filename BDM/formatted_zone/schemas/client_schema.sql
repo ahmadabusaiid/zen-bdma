@@ -46,7 +46,7 @@ CREATE TABLE client.product_prices(
 	shipment_id string NOT NULL,
 	branch_id string NOT NULL,
 	FOREIGN KEY(product_id) REFERENCES products(product_id),
-	FOREIGN KEY(shipment_id) REFERENCES stocks(shipment_id)
+	FOREIGN KEY(shipment_id) REFERENCES shipments(shipment_id)
 );
 
 CREATE TABLE client.offer_details(
@@ -88,13 +88,13 @@ CREATE TABLE client.sales(
 
 -- ************************INDEX********************************
 
-drop index stock_in_date;
-drop index inventory_date;
-drop index product_pricing_date;
-drop index transaction_date;
-drop index sales_date;
+drop index client.stock_in_date;
+drop index client.inventory_date;
+drop index client.product_pricing_date;
+drop index client.transaction_date;
+drop index client.sales_date;
 
-create index stock_in_date on client.stocks(date);
+create index stock_in_date on client.shipments(date);
 create index inventory_date on client.inventory(date);
 create index product_pricing_date on client.product_prices(date);
 create index transaction_date on client.transactions(date);

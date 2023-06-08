@@ -4,7 +4,7 @@ global_params = {
     "temp_dir" : "data",
     "branch_id":"BCN",
     "load_sources" :['dolibarr','ineapi','weatherapi'],
-    "load_tables" : ['products','shipments','inventory','product_prices','transactions', 'sales','customers','offer','offer_details']
+    "load_tables" : ['products','shipments','inventory','product_prices','customers','transactions', 'sales','offer','offer_details']
 }
     
 ## persistent loader
