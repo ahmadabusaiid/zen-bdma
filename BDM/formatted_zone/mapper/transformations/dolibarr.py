@@ -85,7 +85,7 @@ def map_to_db(today, branch_id):
                 ## Products table -> update
                 products = dolibarr_products.select(col('id').alias('product_id'),'label','description','type').distinct().withColumn('branch_id',lit(branch_id))
                 ex_products = db_loader.read_table(spark, \
-                    '''SELECT product_id as ex_product_id, label as ex_label, description as ex_description, type as ex_type, branch_id as ex_branch_id FROM client.products''')
+                    '''SELECT product_id as ex_product_id, label as ex_label, description as ex_description, type as ex_type, branch_id as ex_branch_id FROM client.products''').cache()
                 j_products = products.join(ex_products, products.product_id ==  ex_products.ex_product_id, "outer")
                 j_products_rdd = j_products.rdd.map(update_products)
                 j_products_new = j_products_rdd.toDF(schema = productSchema)
@@ -124,7 +124,7 @@ def map_to_db(today, branch_id):
 
                 ## Customers table -> update
                 customer_details = dolibarr_invoices.select(col('ref_customer').alias('customer_id'),col('firstname').alias('first_name'),col('lastname').alias('last_name')).distinct().withColumn('branch_id',lit(branch_id))
-                ex_customer_details = db_loader.read_table(spark, '''SELECT customer_id as ex_customer_id, first_name as ex_first_name, last_name as ex_last_name, branch_id as ex_branch_id FROM client.customers''')
+                ex_customer_details = db_loader.read_table(spark, '''SELECT customer_id as ex_customer_id, first_name as ex_first_name, last_name as ex_last_name, branch_id as ex_branch_id FROM client.customers''').cache()
 
                 j_customers = customer_details.join(ex_customer_details, customer_details.customer_id ==  ex_customer_details.ex_customer_id, "outer")
                 j_customers_rdd = j_customers.rdd.map(update_customer_details)
